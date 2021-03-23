@@ -20,22 +20,22 @@ public class UserService {
     }
 
     public boolean delete(UserId userId) throws Exception {
-        if (!userValidator.isValid(userId)) throw new ValidUserException();
+        if (!userValidator.isValid(userId)) throw new InvalidUserException();
         return userRepository.delete(userId);
     }
 
     public User save(User user) throws Exception {
-        if (!userValidator.isValid(user.getId())) throw new ValidUserException();
+        if (!userValidator.isValid(user.getId())) throw new InvalidUserException();
         return userRepository.save(user);
     }
 
     public User update(User user) throws Exception {
-        if (!userValidator.isValid(user.getId())) throw new ValidUserException();
+        if (!userValidator.isValid(user.getId())) throw new InvalidUserException();
         return userRepository.update(user);
     }
 
     public User get(UserId userId) throws Exception {
-        if (!userValidator.isValid(userId)) throw new ValidUserException();
+        if (!userValidator.isValid(userId)) throw new InvalidUserException();
         return userRepository.get(userId);
     }
 

@@ -1,5 +1,8 @@
 package com.quot.user.micro.service.test.users.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.springframework.util.ReflectionUtils;
+
 /*
 * {
   "id": {
@@ -53,5 +56,9 @@ public class User {
 
     public void setMetadata(String name, String email, String role){
         this.metadata = new UserMetadata(name, email, role);
+    }
+    @Override
+    public boolean equals(Object o){
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 }

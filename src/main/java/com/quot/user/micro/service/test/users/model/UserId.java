@@ -1,5 +1,8 @@
 package com.quot.user.micro.service.test.users.model;
 
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 public class UserId {
 
     private String userId;
@@ -27,5 +30,10 @@ public class UserId {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 }

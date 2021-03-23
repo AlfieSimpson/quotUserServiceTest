@@ -43,6 +43,6 @@ public class UserController {
     public void fileNotFound(){}
 
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ValidUserException.class)
+    @ExceptionHandler(InvalidUserException.class)
     public void invalidModel(){}
 }

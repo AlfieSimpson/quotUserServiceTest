@@ -2,6 +2,7 @@ package com.quot.user.micro.service.test.users.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quot.user.micro.service.test.files.FileFactory;
 import com.quot.user.micro.service.test.files.FileProperties;
 import com.quot.user.micro.service.test.files.FileService;
 import com.quot.user.micro.service.test.users.model.User;
@@ -24,6 +25,7 @@ public class FileBasedUserRepository implements UserRepository{
 
     private FileProperties fileProperties;
     private FileService fileService;
+    private FileFactory fileFactory;
 
     private File userStoringDirectory;
 
@@ -33,9 +35,11 @@ public class FileBasedUserRepository implements UserRepository{
 
     @Autowired
     public FileBasedUserRepository(FileProperties fileProperties,
-                                   FileService fileService){
+                                   FileService fileService,
+                                   FileFactory fileFactory){
         this.fileProperties = fileProperties;
-        this.userStoringDirectory = new File(fileProperties.getUserDirectory());
+        this.fileFactory = fileFactory;
+        this.userStoringDirectory = fileFactory.newFile(fileProperties.getUserDirectory());
         this.fileService = fileService;
     }
 
@@ -43,7 +47,7 @@ public class FileBasedUserRepository implements UserRepository{
     @Override
     public User get(UserId userId) throws IOException {
 
-        File userFile = new File(userStoringDirectory.getPath(), userIdToFilename(userId));
+        File userFile = fileFactory.newFile(userStoringDirectory.getPath(), userIdToFilename(userId));
 
         if (!userFile.exists()) throw new FileNotFoundException();
         String userJson;
@@ -78,7 +82,7 @@ public class FileBasedUserRepository implements UserRepository{
     public boolean delete(UserId userId) {
 
         String fileToDelete = userIdToFilename(userId);
-        File userFile = new File(userStoringDirectory.getPath(), fileToDelete);
+        File userFile = fileFactory.newFile(userStoringDirectory.getPath(), fileToDelete);
 
         boolean alreadyExists = userFile.exists();
         boolean successfulDeletion = userFile.delete();
@@ -98,8 +102,8 @@ public class FileBasedUserRepository implements UserRepository{
 
     private User upsert(User user) throws IOException {
 
-        File userFile = new File(userStoringDirectory.getPath(), userToFilename(user));
-
+        File userFile = fileFactory.newFile(userStoringDirectory.getPath(), userToFilename(user));
+        if (userFile.exists()) userFile.delete();
         try {
             userFile.createNewFile();
 
@@ -114,7 +118,13 @@ public class FileBasedUserRepository implements UserRepository{
             throw e;
         }
 
-        return user;
+        User savedUser;
+        try {
+             savedUser = get(user.getId());
+        } catch (Exception e){
+            throw new FileNotFoundException();
+        }
+        return savedUser;
     }
 
 

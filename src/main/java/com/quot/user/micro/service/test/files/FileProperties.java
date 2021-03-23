@@ -14,16 +14,17 @@ public class FileProperties {
     public FileProperties() {
     }
 
-    public FileProperties(String userpath) {
-        if (!userpath.endsWith("/") && !userpath.endsWith("\\") ) userpath.concat(File.separator);
-        this.userDirectory = userpath;
+    public FileProperties(String userPath) {
+        if (!userPath.endsWith(File.separator)) userPath = userPath.concat(File.separator);
+        this.userDirectory = userPath;
     }
 
     public String getUserDirectory() {
         return userDirectory;
     }
 
-    public void setUserDirectory(String userDirectory) {
-        this.userDirectory = userDirectory;
+    public void setUserDirectory(String userPath) {
+        if (!userPath.endsWith(File.separator)) userPath = userPath.concat(File.separator);
+        this.userDirectory = userPath;
     }
 }

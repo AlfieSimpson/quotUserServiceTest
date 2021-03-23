@@ -1,5 +1,7 @@
 package com.quot.user.micro.service.test.users.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 /*
 
   "metadata": {
@@ -47,5 +49,9 @@ public class UserMetadata {
 
     public void setRole(String role) {
         this.role = role;
+    }
+    @Override
+    public boolean equals(Object o){
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 }

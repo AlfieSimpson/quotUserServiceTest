@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
-import java.nio.file.Files;
 
 @Configuration
 public class FileConfiguration {
@@ -15,11 +14,12 @@ public class FileConfiguration {
 
     private static final String NEW_FOLDER_CREATED = "The configured directory (%s) to store Users seems to be missing. Will try to create";
 
+
     @Autowired
-    public FileConfiguration(FileProperties fileProperties){
+    public FileConfiguration(FileProperties fileProperties, FileFactory fileFactory){
         String pathToUserFiles = fileProperties.getUserDirectory();
 
-        File userFileDirectory = new File(pathToUserFiles);
+        File userFileDirectory = fileFactory.newFile(pathToUserFiles);
         if (!userFileDirectory.exists()) {
             LOGGER.info(String.format(NEW_FOLDER_CREATED, pathToUserFiles));
             userFileDirectory.mkdir();
