@@ -3,19 +3,6 @@ package com.quot.user.micro.service.test.users.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.springframework.util.ReflectionUtils;
 
-/*
-* {
-  "id": {
-    "clientId": "quotech",
-    "userId": "nick"
-  },
-  "metadata": {
-    "name": "Nick Melis",
-    "email": "nick@quotech.io"
-    "role": "CTO"
-  }
-}
- */
 public class User {
 
     private UserId id;
