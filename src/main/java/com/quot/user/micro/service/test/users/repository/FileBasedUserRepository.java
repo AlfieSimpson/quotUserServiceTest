@@ -15,6 +15,10 @@ import org.springframework.stereotype.Repository;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class FileBasedUserRepository implements UserRepository{
@@ -98,6 +102,32 @@ public class FileBasedUserRepository implements UserRepository{
     @Override
     public User update(User user) throws IOException {
         return upsert(user);
+    }
+
+    @Override
+    public List<User> getAll() throws Exception {
+        List<User> toReturn = new ArrayList<>();
+        Files.list(Path.of(userStoringDirectory.getPath()))
+                .forEach(path -> {
+                    File currentFile = path.toFile();
+                    String userJson;
+
+                    try {
+
+                        userJson = fileService.read(currentFile);
+                        User user;
+
+                        user = OBJECT_MAPPER.readValue(userJson, User.class);
+                        toReturn.add(user);
+
+                    } catch (IOException e) {
+
+                        LOGGER.info(String.format(READ_ISSUE, currentFile.getPath()));
+                        e.printStackTrace();
+                    }
+                });
+
+        return toReturn;
     }
 
     private User upsert(User user) throws IOException {

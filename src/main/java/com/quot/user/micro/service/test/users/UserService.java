@@ -7,6 +7,8 @@ import com.quot.user.micro.service.test.users.validators.UserIdValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -37,6 +39,11 @@ public class UserService {
     public User get(UserId userId) throws Exception {
         if (!userValidator.isValid(userId)) throw new InvalidUserException();
         return userRepository.get(userId);
+    }
+
+    public List<User> getAll() throws Exception {
+
+        return userRepository.getAll();
     }
 
 }
